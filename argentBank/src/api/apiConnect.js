@@ -9,3 +9,11 @@ export function apiConnect() {
     },
   });
 }
+export function apiProfile(token) {
+  return axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}

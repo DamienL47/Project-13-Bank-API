@@ -8,8 +8,17 @@ export const login = (userData) => async (dispatch) => {
       password: userData.password,
     });
 
-    dispatch({ type: "LOGIN_SUCCESS", payload: response.data });
+    dispatch({ type: "LOGIN_SUCCESS", payload: response.data.body.token });
   } catch (error) {
-    dispatch({ type: "LOGIN_FAIL", payload: error.response.data });
+    dispatch({ type: "LOGIN_FAIL", payload: error });
+  }
+};
+export const logout = () => async (dispatch) => {
+  try {
+    localStorage.removeItem("token");
+
+    dispatch({ type: "LOGOUT" });
+  } catch (error) {
+    console.error("Error during logout:", error);
   }
 };

@@ -5,12 +5,14 @@ import { Footer } from "../../components/Footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "store/actions/authActions";
 import { NavBar } from "components/NavBar/NavBar";
+import { postProfile } from "store/actions/profileActions";
 
 export function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const token = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.auth.error);
 
   const [formData, setFormData] = useState({
@@ -31,10 +33,16 @@ export function SignIn() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/profile");
-    }
-  }, [isAuthenticated, navigate]);
+    const fetchData = async () => {
+      if (isAuthenticated) {
+        dispatch(postProfile(isAuthenticated));
+        navigate("/profile");
+        localStorage.setItem("token", token);
+      }
+    };
+
+    fetchData();
+  }, [isAuthenticated, navigate, dispatch]);
 
   return (
     <>

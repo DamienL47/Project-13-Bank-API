@@ -1,25 +1,39 @@
-import { Outlet } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import logo from "../../assets/img/argentBankLogo.png";
 
 export function NavBar() {
-  // Ici si l'utilisateur est connecté remplacer sign in par sign out
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  const handleLogout = () => {
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
+  };
 
   return (
     <>
       <nav className="main-nav">
-        <a className="main-nav-logo" href="/">
+        <Link className="main-nav-logo" to="/">
           <img
             className="main-nav-logo-image"
             src={logo}
             alt="Argent Bank Logo"
           />
           <h1 className="sr-only">Argent Bank</h1>
-        </a>
+        </Link>
         <div>
-          <a className="main-nav-item" href="/signIn">
-            <i className="fa fa-user-circle"></i>
-            Sign In
-          </a>
+          {isAuthenticated ? (
+            <a className="main-nav-item" onClick={handleLogout}>
+              <i className="fa fa-user-circle"></i>Logout
+            </a>
+          ) : (
+            <Link className="main-nav-item" to="/signIn">
+              <i className="fa fa-user-circle"></i>Sign In
+            </Link>
+          )}
         </div>
       </nav>
       <Outlet />

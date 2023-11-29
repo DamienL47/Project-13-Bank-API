@@ -1,42 +1,34 @@
 const initialState = {
-  status: null,
   message: null,
   body: {
-    email: null,
     firstName: null,
     lastName: null,
-    createdAt: null,
-    updatedAt: null,
     id: null,
+    email: null,
   },
   isAuthenticated: false,
 };
 
-const ProfileReducer = (state = initialState, action) => {
+const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case "PROFILE_SUCCESS":
       return {
         ...state,
-        status: 200,
         message: action.payload.message,
         body: {
-          email: action.payload.body.email,
           firstName: action.payload.body.firstName,
           lastName: action.payload.body.lastName,
-          createdAt: action.payload.body.createdAt,
-          updatedAt: action.payload.body.updatedAt,
           id: action.payload.body.id,
+          email: action.payload.body.email,
         },
         isAuthenticated: true,
       };
     case "PROFILE_FAIL":
       return {
         ...state,
-        status: 401,
-        message: action.payload.message,
-        error: action.payload.message,
+        isAuthenticated: false,
       };
-    case "LOGOUT":
+    case "PROFILE_TOKEN_MISSING":
       return {
         ...state,
         isAuthenticated: false,
@@ -46,4 +38,4 @@ const ProfileReducer = (state = initialState, action) => {
   }
 };
 
-export default ProfileReducer;
+export default profileReducer;

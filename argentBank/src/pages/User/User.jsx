@@ -1,13 +1,30 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { NavBar } from "components/NavBar/NavBar";
 import { Footer } from "../../components/Footer/Footer";
+import { useEffect } from "react";
+import { postProfile } from "store/actions/profileActions";
+import { useNavigate } from "react-router";
 
 function User() {
-  const userProfile = useSelector((state) => {
-    console.log("state.profile:", state.profile);
-    return state.profile;
-  });
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const token = useSelector((state) => state.auth.token);
+  // console.log("token", token);
+  const userProfile = useSelector((state) => state.profile);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/signIn");
+    } else {
+      dispatch(postProfile({ token, isAuthenticated }));
+    }
+  }, [dispatch, isAuthenticated, navigate, token]);
+
+  // console.log("userProfile", userProfile);
   return (
     <>
+      <NavBar />
       <main className="main bg-dark">
         <div className="header">
           <h1>

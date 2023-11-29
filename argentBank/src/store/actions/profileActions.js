@@ -1,31 +1,29 @@
-import { apiConnect } from "api/apiConnect";
+import { apiProfile } from "api/apiConnect";
 import { PROFILE } from "api/config";
 
-export const postProfile = (userData) => async (dispatch) => {
-  try {
-    const response = await apiConnect().post(PROFILE, {
-      Authorization: userData.token,
-    });
-    dispatch({ type: "PROFILE_SUCCESS", payload: response.data });
-  } catch (error) {
-    dispatch({ type: "PROFILE_FAIL", payload: error.response.data });
-  }
-};
+export const postProfile =
+  ({ isAuthenticated, token }) =>
+  async (dispatch) => {
+    const { errorMessage } = "Utilisateur inconnu";
+    if (!token && !isAuthenticated) {
+      dispatch({ type: "PROFILE_TOKEN_MISSING" });
+      return;
+    }
 
-export const logout = () => (dispatch) => {
-  dispatch({ type: "LOGOUT" });
-};
+    try {
+      const response = await apiProfile(token).post(PROFILE, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-export const updateProfile = (userData) => async (dispatch) => {
-  try {
-    const response = await apiConnect().put(PROFILE, {
-      Authorization: userData.token,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-    });
+      console.log("token ", token);
+      console.log("response profile", response);
 
-    dispatch({ type: "UPDATE_PROFILE_SUCCESS", payload: response.data });
-  } catch (error) {
-    dispatch({ type: "UPDATE_PROFILE_FAIL", payload: error.response.data });
-  }
-};
+      dispatch({ type: "PROFILE_SUCCESS", payload: response.data });
+    } catch (error) {
+      console.error("Erreur lors de la requête API :", error);
+      console.error("Données envoyées :", error.config.data);
+      dispatch({ type: "PROFILE_FAIL", payload: errorMessage });
+    }
+  };
