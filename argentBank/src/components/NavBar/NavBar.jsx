@@ -1,6 +1,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../../assets/img/argentBankLogo.png";
+import { logout } from "store/actions/authActions";
 
 export function NavBar() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export function NavBar() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const handleLogout = () => {
-    dispatch({ type: "LOGOUT" });
+    dispatch(logout());
     navigate("/");
   };
 
