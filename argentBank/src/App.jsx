@@ -1,6 +1,6 @@
 import React from "react";
 import "./global.css";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Home } from "../src/pages/Home/Home";
 import { SignIn } from "./pages/SignIn/SignIn";
 import { Error404 } from "pages/Error404/Error404";

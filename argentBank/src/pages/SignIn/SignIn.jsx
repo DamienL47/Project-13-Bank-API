@@ -8,23 +8,30 @@ import { NavBar } from "components/NavBar/NavBar";
 import { postProfile } from "store/actions/profileActions";
 
 export function SignIn() {
+  // Utilisation du hook useDispatch pour accéder à la fonction dispatch de Redux
   const dispatch = useDispatch();
+  // Utilisation du hook useNavigate pour la navigation programmative
   const navigate = useNavigate();
 
+  // Utilisation du hook useSelector pour extraire des données du store Redux
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const token = useSelector((state) => state.auth.token);
   const error = useSelector((state) => state.auth.error);
 
+  // Utilisation du hook useState pour gérer l'état local du formulaire
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
 
+  // Fonction appelée lors de la soumission du formulaire
   const submit = (e) => {
     e.preventDefault();
+    // Appel de l'action login avec les données du formulaire
     dispatch(login(formData));
   };
 
+  // Fonction appelée lorsqu'une valeur du formulaire change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -32,18 +39,25 @@ export function SignIn() {
     });
   };
 
+  // Effet secondaire déclenché lorsque le composant monte ou que isAuthenticated change
   useEffect(() => {
     const fetchData = async () => {
+      // Vérification si l'utilisateur est authentifié
       if (isAuthenticated) {
+        // Appel de l'action postProfile pour récupérer les données du profil
         dispatch(postProfile(isAuthenticated));
+        // Redirection vers la page de profil
         navigate("/profile");
+        // Stockage du jeton d'authentification dans le localStorage
         localStorage.setItem("token", token);
       }
     };
 
+    // Appel de la fonction fetchData
     fetchData();
   }, [isAuthenticated, navigate, dispatch]);
 
+  // Rendu du composant
   return (
     <>
       <NavBar />
