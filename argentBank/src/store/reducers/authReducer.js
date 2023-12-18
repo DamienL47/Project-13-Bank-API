@@ -18,7 +18,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         isAuthenticated: false,
         token: null,
-        error: "Utilisateur inconnu",
+        error: "Unknown user",
       };
     case "LOGOUT":
       return {
