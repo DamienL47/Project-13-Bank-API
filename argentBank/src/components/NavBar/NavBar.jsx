@@ -8,6 +8,7 @@ export function NavBar() {
   const dispatch = useDispatch();
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const userName = useSelector((state) => state.profile.body.firstName);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -27,9 +28,15 @@ export function NavBar() {
         </Link>
         <div>
           {isAuthenticated ? (
-            <a className="main-nav-item" onClick={handleLogout}>
-              <i className="fa fa-user-circle"></i>Logout
-            </a>
+            <>
+              <Link className="main-nav-item-connect" to="/profile">
+                <i className="fa fa-user-circle user-connect"></i> {userName}
+              </Link>
+
+              <a className="main-nav-item" onClick={handleLogout}>
+                Logout
+              </a>
+            </>
           ) : (
             <Link className="main-nav-item" to="/signIn">
               <i className="fa fa-user-circle"></i>Sign In
